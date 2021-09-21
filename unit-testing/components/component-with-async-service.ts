@@ -105,3 +105,15 @@ it('should show quote after getQuote (fakeAsync)', fakeAsync(() => {
   expect(quoteEl.textContent).toBe(testQuote, 'should show quote');
   expect(errorMessage()).toBeNull('should not show error');
 }));
+
+// Async test with waitForAsync()
+// The waitForAsync() utility hides some asynchronous boilerplate by arranging for the tester's code to run in a special async test zone
+it('should show quote after getQuote (waitForAsync)', waitForAsync(() => {
+    fixture.detectChanges();
+    expect(quoteEl.textContent).toBe('...', 'should show placeholder');
+    fixture.whenStable().then(() => {
+        fixture.detectChanges();
+        expect(quoteEl.textContent).toBe(testQuote);
+        expect(errorMessage()).toBeNull('should not show error');
+    });
+}));
