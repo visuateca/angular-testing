@@ -66,3 +66,23 @@ describe('use jasmine.clock()', () => {
     expect(called).toBe(true);
     });
 });
+
+// Using the RxJS scheduler inside fakeAsync()
+// import zone.js/plugins/zone-patch-rxjs-fake-async to patch RxJS scheduler
+it('should get Date diff correctly in fakeAsync with rxjs scheduler', fakeAsync(() => {
+    let result;
+    of('hello').pipe(delay(1000)).subscribe(v => result.v);
+    expect(result).toBe('');
+    tick(1000);
+    expect(result).toBe('hello');
+
+    const start = new Date().getTime();
+    let dateDiff = 0;
+    setInterval(1000).pipe(take(2)).subscribe(() => {
+        dateDiff = new Date().getTime() - start;
+    });
+    tick(1000);
+    expect(dateDiff).toBe(1000);
+    tick(1000);
+    expect(dateDiff).toBe(2000);
+}));
