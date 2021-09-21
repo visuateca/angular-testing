@@ -39,3 +39,30 @@ it('should display error when TwainService fails', fakeAsync(() => {
     expect(errorMessage()).toMatch(/test failure/, 'should display error');
     expect(quoteEl.textContent).toBe('...', 'should show placeholder');
 }));
+// The tick() function
+// Calling tick() simulates the passage of time until all pending asynchronous activities finish
+it('should run timeout callback with delay after call tick with millis', fakeAsync(() => {
+    let called = false;
+    setTimeout(() => {
+        called = true;
+    }, 100);
+    tick(100);
+    expect(called).toBe(true);
+}));
+// jasmine.clock with fakeAsync()
+describe('use jasmine.clock()', () => {
+    beforeEach(() => {
+      jasmine.clock().install();
+    });
+    afterEach(() => {
+      jasmine.clock().uninstall();
+    });
+    it('should auto enter fakeAsync', () => {
+        let called = false;
+    setTimeout(() => {
+      called = true;
+        }, 100);
+    jasmine.clock().tick(100);
+    expect(called).toBe(true);
+    });
+});
