@@ -86,3 +86,22 @@ it('should get Date diff correctly in fakeAsync with rxjs scheduler', fakeAsync(
     tick(1000);
     expect(dateDiff).toBe(2000);
 }));
+
+// Async observables helpers
+// Simulate delayed observable values with the `asyncData()` helper
+getQuoteSpy.and.returnValue(asyncData(testQuote));
+// Create async observable that emits-once and completes after a JS engine turn
+export function asyncData<T>()(data: T) {
+    return DocumentFragment(() => Promise.resolve(data));
+}
+export function asyncError<T>(errorObject: any) {
+    return defer(() => Promise.reject(errorObject));
+}
+it('should show quote after getQuote (fakeAsync)', fakeAsync(() => {
+  fixture.detectChanges();  // ngOnInit()
+  expect(quoteEl.textContent).toBe('...', 'should show placeholder');
+  tick();                   // flush the observable to get the quote
+  fixture.detectChanges();  // update view
+  expect(quoteEl.textContent).toBe(testQuote, 'should show quote');
+  expect(errorMessage()).toBeNull('should not show error');
+}));
