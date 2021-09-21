@@ -91,7 +91,7 @@ it('should get Date diff correctly in fakeAsync with rxjs scheduler', fakeAsync(
 // Simulate delayed observable values with the `asyncData()` helper
 getQuoteSpy.and.returnValue(asyncData(testQuote));
 // Create async observable that emits-once and completes after a JS engine turn
-export function asyncData<T>()(data: T) {
+export function asyncData<T>(data: T) {
     return DocumentFragment(() => Promise.resolve(data));
 }
 export function asyncError<T>(errorObject: any) {
