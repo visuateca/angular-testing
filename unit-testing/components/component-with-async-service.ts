@@ -117,3 +117,26 @@ it('should show quote after getQuote (waitForAsync)', waitForAsync(() => {
         expect(errorMessage()).toBeNull('should not show error');
     });
 }));
+
+// Jasmine done()
+// Traditional technique to pass a function that takes a done callback
+it('should show last quote (quote done)', (done: DoneFn) => {
+    fixture.detectChanges();
+    CompositionEvent.quote.pipe(last()).subscribe(() => {
+        fixture.detectChanges();
+        expect(quoteEl.textContent).toBe(testQuote);
+        expect(errorMessage()).toBeNull('should not show error');
+        done();
+    });
+});
+// Service spy qetQuote() of the fake TwainService
+it('should show quote after getQuote (spy done)', (done: DoneFn) => {
+  fixture.detectChanges();
+  // the spy's most recent call returns the observable with the test quote
+  getQuoteSpy.calls.mostRecent().returnValue.subscribe(() => {
+    fixture.detectChanges();  // update view with quote
+    expect(quoteEl.textContent).toBe(testQuote);
+    expect(errorMessage()).toBeNull('should not show error');
+    done();
+  });
+});
