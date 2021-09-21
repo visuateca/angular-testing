@@ -9,7 +9,7 @@ class MockUserService {
     user = { name: 'test', password: 'test' };
 }
 
-// Configure TestBed module in welcome.component.spec.ts
+// Configure TestBed module in welcome.component.spec.ts with dependency service -> synchronous
 beforeEach(() => {
     // Provide and inject both the component and the service in the TestBed configuration
     TestBed.configureTestingModule({
@@ -21,6 +21,24 @@ beforeEach(() => {
     component = TestBed.inject(WelcomeComponent);
     userService = TestBed.inject(UsersService);
 });
+
+// Configure TestBed module in welcome.component.spec.ts -> asynchronous
+// async/await method
+beforeEach(async () => {
+    await TestBed.configureTestingModule({
+        declarations: [
+            AppComponent
+        ]
+    }).compileComponents();
+});
+// waitForAsync method
+beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+        declarations: [
+            BannerComponent
+        ]
+    }).compileComponents();
+}));
 
 // Use lifecycle hooks for initialization "onInit" in this case
 it('should welcome logged in user after Angular calls ngOnInit', () => {
