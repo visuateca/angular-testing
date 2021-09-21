@@ -45,3 +45,28 @@ it('should welcome logged in user after Angular calls ngOnInit', () => {
     comp.ngOnInit();
     expect(comp.welcome).toContain(userService.user.name);
 });
+
+// createComponent usage for reduced setup
+TestBed.configureTestingModule({ declarations: [BannerComponent] });
+const fixture = TestBed.createComponent(BannerComponent);
+const component = fixture.componentInstance;
+expect.component.toBeDefined();
+
+// ComponentFixture.nativeElement
+// If nativeElement is HTMLElement use standard querySelector
+const bannerElement = fixture.nativeElement;
+const p = bannerElement.querySelector('p');
+expect(p.textContent).toEqual('banner works');
+
+// ComponentFixture.debugElement
+// nativeElement is convenience method for fixture.debugElement.nativeElement
+import { DebugElement } from '@angular/core';
+const bannerDe: DebugElement = fixture.debugElement;
+const bannerNe: HTMLElement = bannerDe.nativeElement;
+
+// For cases when tests don't run on browser platform (WebWorker, SSR) use By.css()
+import { By } from '@angular/platform-browser';
+const debugElement: DebugElement = fixture.debugElement;
+const paragraph = debugElement.query(By.css('p'));
+const p: HTMLElement = paragraph.nativeElement;
+expect(p.textContent).toEqual('works');
